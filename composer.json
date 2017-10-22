@@ -1,0 +1,25 @@
+{
+    "name": "juit/raspberry-piface2-api",
+    "type": "library",
+    "description": "Lets you control your PiFace for Raspberry Pi with PHP via Python scripts",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jan Unger",
+            "email": "jan.unger@juit.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JUIT\\PiFace\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JUIT\\PiFace\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    }
+}
