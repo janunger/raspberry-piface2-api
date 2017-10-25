@@ -13,8 +13,11 @@ class PiFace implements \JUIT\PiFace\PiFace
      */
     private $processRunner;
 
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(ProcessRunner $processRunner = null)
     {
+        if (null === $processRunner) {
+            $processRunner = new ProcessRunner();
+        }
         $this->processRunner = $processRunner;
     }
 
