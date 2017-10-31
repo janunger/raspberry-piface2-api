@@ -8,11 +8,25 @@ use Symfony\Component\Process\Process;
 
 class ProcessRunner
 {
+    /**
+     * @var string
+     */
+    private $command = '';
+
+    /**
+     * @var Process
+     */
+    private $process;
+
     public function mustRun(string $command): string
     {
-        $process = new Process($command);
-        $process->mustRun();
+        if ($this->command !== $command) {
+            $this->command = $command;
+            $this->process = new Process($this->command);
+        }
 
-        return $process->getOutput();
+        $this->process->mustRun();
+
+        return $this->process->getOutput();
     }
 }

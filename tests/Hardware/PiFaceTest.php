@@ -26,10 +26,32 @@ class PiFaceTest extends TestCase
     /** @test */
     public function it_reads_all_input_pin_states_at_once()
     {
+        $output =
+"+------+---------+--------+
+|  Pin | Digital | Analog |
++------+---------+--------+
+|  200 |     0   |     0  |
+|  201 |     1   |     0  |
+|  202 |     1   |     0  |
+|  203 |     1   |     0  |
+|  204 |     1   |     0  |
+|  205 |     1   |     0  |
+|  206 |     1   |     0  |
+|  207 |     1   |     0  |
+|  208 |     0   |     0  |
+|  209 |     0   |     0  |
+|  210 |     0   |     0  |
+|  211 |     0   |     0  |
+|  212 |     0   |     0  |
+|  213 |     0   |     0  |
+|  214 |     0   |     0  |
+|  215 |     0   |     0  |
++------+---------+--------+
+";
         $this->processRunner
             ->expects(static::once())->method('mustRun')
-            ->with('python3 ' . PROJECT_ROOT_DIR . '/src/Hardware/bin/read_all.py')
-            ->willReturn('10000000' . PHP_EOL);
+            ->with('gpio -p readall')
+            ->willReturn($output);
 
         $state = $this->SUT->readInputPins();
 

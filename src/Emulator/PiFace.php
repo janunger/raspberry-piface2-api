@@ -36,7 +36,7 @@ class PiFace implements \JUIT\PiFace\PiFace
         $this->assertDataFileExists();
 
         $state = $this->readState();
-        $state[$pinId] = '1';
+        $state[$pinId] = '0';
         $this->writeState($state);
     }
 
@@ -45,7 +45,7 @@ class PiFace implements \JUIT\PiFace\PiFace
         $this->assertDataFileExists();
 
         $state = $this->readState();
-        $state[$pinId] = '0';
+        $state[$pinId] = '1';
         $this->writeState($state);
     }
 
@@ -55,17 +55,20 @@ class PiFace implements \JUIT\PiFace\PiFace
             return;
         }
 
-        $state = str_repeat('0', $this->pinCount);
+        $state = [];
+        for ($i = 0; $i < $this->pinCount; ++$i) {
+            $state[] = '1';
+        }
         $this->writeState($state);
     }
 
-    private function readState(): string
+    private function readState(): array
     {
-        return file_get_contents($this->dataFile->getPathname());
+        return str_split(file_get_contents($this->dataFile->getPathname()));
     }
 
-    private function writeState(string $content)
+    private function writeState(array $content)
     {
-        file_put_contents($this->dataFile->getPathname(), $content);
+        file_put_contents($this->dataFile->getPathname(), implode('', $content));
     }
 }

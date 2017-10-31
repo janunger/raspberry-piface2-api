@@ -9,13 +9,13 @@ class InputPinState
     /** @var bool[] */
     private $pinStates;
 
-    public function __construct(string $pythonScriptOutput)
+    public function __construct(array $pinStates)
     {
         $this->pinStates = array_map(
             function (string $pinState): bool {
-                return $pinState === '1';
+                return $pinState === '0';
             },
-            str_split($pythonScriptOutput, 1)
+            $pinStates
         );
     }
 

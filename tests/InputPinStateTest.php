@@ -11,9 +11,18 @@ use PHPUnit\Framework\TestCase;
 class InputPinStateTest extends TestCase
 {
     /** @test */
-    public function it_transforms_the_python_script_output()
+    public function it_transforms_the_bash_script_output()
     {
-        $SUT = new InputPinState('01001000');
+        $SUT = new InputPinState([
+            0 => '1',
+            1 => '0',
+            2 => '1',
+            3 => '1',
+            4 => '0',
+            5 => '1',
+            6 => '1',
+            7 => '1',
+        ]);
 
         static::assertFalse($SUT->isPinOn(0));
         static::assertTrue($SUT->isPinOn(1));
@@ -28,7 +37,16 @@ class InputPinStateTest extends TestCase
     /** @test */
     public function it_throws_an_exception_if_pin_id_is_unknown()
     {
-        $SUT = new InputPinState('01001000');
+        $SUT = new InputPinState([
+            0 => '1',
+            1 => '0',
+            2 => '1',
+            3 => '1',
+            4 => '0',
+            5 => '1',
+            6 => '1',
+            7 => '1',
+        ]);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Undefined input pin ID (8)');

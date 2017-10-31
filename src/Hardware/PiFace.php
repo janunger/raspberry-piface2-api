@@ -23,9 +23,14 @@ class PiFace implements \JUIT\PiFace\PiFace
 
     public function readInputPins(): InputPinState
     {
-        $command = sprintf('python3 %s/bin/read_all.py', __DIR__);
-        $output = $this->processRunner->mustRun($command);
+        $output = $this->processRunner->mustRun('gpio -p readall');
+        $lines = explode(PHP_EOL, $output);
+        $state = [];
+        for ($i = 0; $i < 8; $i++) {
+            $line      = $lines[$i + 3];
+            $state[$i] = $line[13];
+        }
 
-        return new InputPinState($output);
+        return new InputPinState($state);
     }
 }
