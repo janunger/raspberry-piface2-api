@@ -5,51 +5,31 @@ declare(strict_types=1);
 namespace JUIT\PiFace\Tests;
 
 use JUIT\PiFace\InputPinState;
-use JUIT\PiFace\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class InputPinStateTest extends TestCase
 {
     /** @test */
-    public function it_transforms_the_bash_script_output()
+    public function it_maps_the_given_array_to_pin_states()
     {
         $SUT = new InputPinState([
-            0 => '1',
-            1 => '0',
-            2 => '1',
-            3 => '1',
-            4 => '0',
-            5 => '1',
-            6 => '1',
-            7 => '1',
+            false,
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
         ]);
 
-        static::assertFalse($SUT->isPinOn(0));
-        static::assertTrue($SUT->isPinOn(1));
-        static::assertFalse($SUT->isPinOn(2));
-        static::assertFalse($SUT->isPinOn(3));
-        static::assertTrue($SUT->isPinOn(4));
-        static::assertFalse($SUT->isPinOn(5));
-        static::assertFalse($SUT->isPinOn(6));
-        static::assertFalse($SUT->isPinOn(7));
-    }
-
-    /** @test */
-    public function it_throws_an_exception_if_pin_id_is_unknown()
-    {
-        $SUT = new InputPinState([
-            0 => '1',
-            1 => '0',
-            2 => '1',
-            3 => '1',
-            4 => '0',
-            5 => '1',
-            6 => '1',
-            7 => '1',
-        ]);
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Undefined input pin ID (8)');
-        $SUT->isPinOn(8);
+        static::assertFalse($SUT->isPin0On());
+        static::assertTrue($SUT->isPin1On());
+        static::assertFalse($SUT->isPin2On());
+        static::assertFalse($SUT->isPin3On());
+        static::assertTrue($SUT->isPin4On());
+        static::assertFalse($SUT->isPin5On());
+        static::assertFalse($SUT->isPin6On());
+        static::assertFalse($SUT->isPin7On());
     }
 }

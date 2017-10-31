@@ -13,15 +13,9 @@ class PiFace implements \JUIT\PiFace\PiFace
      */
     private $dataFile;
 
-    /**
-     * @var int
-     */
-    private $pinCount;
-
-    public function __construct(\SplFileInfo $dataFile, int $pinCount = 8)
+    public function __construct(\SplFileInfo $dataFile)
     {
         $this->dataFile = $dataFile;
-        $this->pinCount = $pinCount;
     }
 
     public function readInputPins(): InputPinState
@@ -36,7 +30,7 @@ class PiFace implements \JUIT\PiFace\PiFace
         $this->assertDataFileExists();
 
         $state = $this->readState();
-        $state[$pinId] = '0';
+        $state[$pinId] = true;
         $this->writeState($state);
     }
 
@@ -45,7 +39,7 @@ class PiFace implements \JUIT\PiFace\PiFace
         $this->assertDataFileExists();
 
         $state = $this->readState();
-        $state[$pinId] = '1';
+        $state[$pinId] = false;
         $this->writeState($state);
     }
 
@@ -56,19 +50,19 @@ class PiFace implements \JUIT\PiFace\PiFace
         }
 
         $state = [];
-        for ($i = 0; $i < $this->pinCount; ++$i) {
-            $state[] = '1';
+        for ($i = 0; $i < static::PIN_COUNT; ++$i) {
+            $state[] = false;
         }
         $this->writeState($state);
     }
 
     private function readState(): array
     {
-        return str_split(file_get_contents($this->dataFile->getPathname()));
+        return json_decode(file_get_contents($this->dataFile->getPathname()), true);
     }
 
-    private function writeState(array $content)
+    private function writeState(array $state)
     {
-        file_put_contents($this->dataFile->getPathname(), implode('', $content));
+        file_put_contents($this->dataFile->getPathname(), json_encode($state));
     }
 }

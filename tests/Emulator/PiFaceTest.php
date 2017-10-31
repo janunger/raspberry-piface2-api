@@ -23,42 +23,47 @@ class PiFaceTest extends TestCase
     public function it_defaults_to_all_pins_off()
     {
         $pinCount = 8;
-        $SUT      = new PiFace($this->dataFile, $pinCount);
+        $SUT      = new PiFace($this->dataFile);
 
         $state = $SUT->readInputPins();
 
-        for ($i = 0; $i < $pinCount; ++$i) {
-            static::assertFalse($state->isPinOn($i));
-        }
+        static::assertFalse($state->isPin0On());
+        static::assertFalse($state->isPin1On());
+        static::assertFalse($state->isPin2On());
+        static::assertFalse($state->isPin3On());
+        static::assertFalse($state->isPin4On());
+        static::assertFalse($state->isPin5On());
+        static::assertFalse($state->isPin6On());
+        static::assertFalse($state->isPin7On());
     }
 
     /** @test */
     public function it_can_turn_a_pin_on()
     {
         $pinCount = 3;
-        $SUT      = new PiFace($this->dataFile, $pinCount);
+        $SUT      = new PiFace($this->dataFile);
 
         $SUT->setPinOn(1);
 
         $state = $SUT->readInputPins();
-        static::assertFalse($state->isPinOn(0));
-        static::assertTrue($state->isPinOn(1));
-        static::assertFalse($state->isPinOn(2));
+        static::assertFalse($state->isPin0On());
+        static::assertTrue($state->isPin1On());
+        static::assertFalse($state->isPin2On());
     }
 
     /** @test */
     public function it_can_turn_a_pin_off_again()
     {
         $pinCount = 3;
-        $SUT      = new PiFace($this->dataFile, $pinCount);
+        $SUT      = new PiFace($this->dataFile);
 
         $SUT->setPinOn(1);
         $SUT->setPinOff(1);
 
         $state = $SUT->readInputPins();
-        static::assertFalse($state->isPinOn(0));
-        static::assertFalse($state->isPinOn(1));
-        static::assertFalse($state->isPinOn(2));
+        static::assertFalse($state->isPin0On());
+        static::assertFalse($state->isPin1On());
+        static::assertFalse($state->isPin2On());
     }
 
     protected function tearDown()

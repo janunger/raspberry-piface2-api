@@ -26,9 +26,9 @@ class PiFace implements \JUIT\PiFace\PiFace
         $output = $this->processRunner->mustRun('gpio -p readall');
         $lines = explode(PHP_EOL, $output);
         $state = [];
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < static::PIN_COUNT; $i++) {
             $line      = $lines[$i + 3];
-            $state[$i] = $line[13];
+            $state[$i] = $line[13] === '0';
         }
 
         return new InputPinState($state);

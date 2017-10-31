@@ -55,7 +55,7 @@ class PiFaceTest extends TestCase
 
         $state = $this->SUT->readInputPins();
 
-        static::assertTrue($state->isPinOn(0));
-        static::assertFalse($state->isPinOn(1));
+        static::assertTrue($state->isPin0On());
+        static::assertFalse($state->isPin1On());
     }
 }

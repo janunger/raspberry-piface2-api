@@ -6,5 +6,7 @@ namespace JUIT\PiFace;
 
 interface PiFace
 {
+    const PIN_COUNT = 8;
+
     public function readInputPins(): InputPinState;
 }
