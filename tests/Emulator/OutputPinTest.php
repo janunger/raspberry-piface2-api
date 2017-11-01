@@ -82,6 +82,18 @@ class OutputPinTest extends TestCase
         static::assertSame(2, $this->SUT->getSwitchCycleCount());
     }
 
+    /** @test */
+    public function it_persists_switch_cycles()
+    {
+        $otherInstance = new OutputPin($this->dataFile);
+
+        $this->SUT->trigger(0);
+        $this->SUT->trigger(0);
+        $this->SUT->trigger(0);
+
+        static::assertSame(3, $otherInstance->getSwitchCycleCount());
+    }
+
     protected function tearDown()
     {
         $this->clearDataFile();

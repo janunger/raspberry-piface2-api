@@ -11,11 +11,6 @@ class OutputPin implements \JUIT\PiFace\OutputPin
      */
     private $dataFile;
 
-    /**
-     * @var int
-     */
-    private $switchCycleCount = 0;
-
     public function __construct(\SplFileInfo $dataFile)
     {
         $this->dataFile = $dataFile;
@@ -39,7 +34,7 @@ class OutputPin implements \JUIT\PiFace\OutputPin
     {
         $state         = $this->readState();
         if ($state['isOn']) {
-            $this->switchCycleCount++;
+            $state['switchCycleCount']++;
         }
         $state['isOn'] = false;
         $this->writeState($state);
@@ -70,12 +65,13 @@ class OutputPin implements \JUIT\PiFace\OutputPin
         $this->writeState(
             [
                 'isOn' => false,
+                'switchCycleCount' => 0,
             ]
         );
     }
 
     public function getSwitchCycleCount(): int
     {
-        return $this->switchCycleCount;
+        return $this->readState()['switchCycleCount'];
     }
 }
