@@ -24,6 +24,20 @@ class OutputPinTest extends TestCase
     }
 
     /** @test */
+    public function it_can_be_triggered_and_respects_duration()
+    {
+        static::assertFalse($this->SUT->isOn());
+
+        $startTime = microtime(true);
+        $this->SUT->trigger(500);
+        $duration = microtime(true) - $startTime;
+
+        static::assertFalse($this->SUT->isOn());
+        static::assertGreaterThanOrEqual(0.490, $duration);
+        static::assertLessThanOrEqual(0.510, $duration);
+    }
+
+    /** @test */
     public function it_can_be_switched_on_and_off()
     {
         static::assertFalse($this->SUT->isOn());
@@ -45,6 +59,27 @@ class OutputPinTest extends TestCase
 
         $this->SUT->switchOff();
         static::assertFalse($otherInstance->isOn());
+    }
+
+    /** @test */
+    public function it_counts_switch_cycles()
+    {
+        static::assertSame(0, $this->SUT->getSwitchCycleCount());
+
+        $this->SUT->switchOn();
+        static::assertSame(0, $this->SUT->getSwitchCycleCount());
+
+        $this->SUT->switchOn();
+        static::assertSame(0, $this->SUT->getSwitchCycleCount());
+
+        $this->SUT->switchOff();
+        static::assertSame(1, $this->SUT->getSwitchCycleCount());
+
+        $this->SUT->switchOff();
+        static::assertSame(1, $this->SUT->getSwitchCycleCount());
+
+        $this->SUT->trigger(0);
+        static::assertSame(2, $this->SUT->getSwitchCycleCount());
     }
 
     protected function tearDown()
