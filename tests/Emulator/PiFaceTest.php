@@ -40,8 +40,7 @@ class PiFaceTest extends TestCase
     /** @test */
     public function it_can_turn_a_pin_on()
     {
-        $pinCount = 3;
-        $SUT      = new PiFace($this->dataFile);
+        $SUT = new PiFace($this->dataFile);
 
         $SUT->setPinOn(1);
 

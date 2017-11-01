@@ -6,15 +6,15 @@ namespace JUIT\PiFace\Hardware;
 
 class OutputPin implements \JUIT\PiFace\OutputPin
 {
-    /** @var int */
-    private $id;
+    /** @var string */
+    private $gpioId;
 
     /** @var ProcessRunner */
     private $processRunner;
 
     public function __construct(int $id, ProcessRunner $processRunner = null)
     {
-        $this->id = $id;
+        $this->gpioId = (string)(200 + $id);
 
         if (!$processRunner) {
             $processRunner = new ProcessRunner();
@@ -24,7 +24,20 @@ class OutputPin implements \JUIT\PiFace\OutputPin
 
     public function trigger(int $durationMilliseconds)
     {
-        $command = sprintf('python3 %s/bin/trigger.py %s %s', __DIR__, $this->id, $durationMilliseconds);
+        $this->switchOn();
+        usleep($durationMilliseconds * 1000);
+        $this->switchOff();
+    }
+
+    public function switchOn()
+    {
+        $command = sprintf('gpio -p write ' . $this->gpioId . ' 1');
+        $this->processRunner->mustRun($command);
+    }
+
+    public function switchOff()
+    {
+        $command = sprintf('gpio -p write ' . $this->gpioId . ' 0');
         $this->processRunner->mustRun($command);
     }
 }

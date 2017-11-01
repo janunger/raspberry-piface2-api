@@ -23,10 +23,40 @@ class OutputPinTest extends TestCase
     public function it_triggers_the_pin_for_a_given_time()
     {
         $this->processRunner
-            ->expects(static::once())->method('mustRun')
-            ->with('python3 ' . PROJECT_ROOT_DIR . '/src/Hardware/bin/trigger.py 1 500');
+            ->expects(static::at(0))->method('mustRun')
+            ->with('gpio -p write 201 1');
+        $this->processRunner
+            ->expects(static::at(1))->method('mustRun')
+            ->with('gpio -p write 201 0');
         $SUT = new OutputPin(1, $this->processRunner);
 
+        $startTime = microtime(true);
         $SUT->trigger(500);
+        $duration = microtime(true) - $startTime;
+
+        static::assertGreaterThanOrEqual(0.490, $duration);
+        static::assertLessThanOrEqual(0.510, $duration);
+    }
+
+    /** @test */
+    public function it_switches_the_pin_on()
+    {
+        $this->processRunner
+            ->expects(static::once())->method('mustRun')
+            ->with('gpio -p write 200 1');
+        $SUT = new OutputPin(0, $this->processRunner);
+
+        $SUT->switchOn();
+    }
+
+    /** @test */
+    public function it_switches_the_pin_off()
+    {
+        $this->processRunner
+            ->expects(static::once())->method('mustRun')
+            ->with('gpio -p write 202 0');
+        $SUT = new OutputPin(2, $this->processRunner);
+
+        $SUT->switchOff();
     }
 }

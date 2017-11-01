@@ -10,4 +10,12 @@ class OutputPin implements \JUIT\PiFace\OutputPin
     {
         usleep($durationMilliseconds * 1000);
     }
+
+    public function switchOn()
+    {
+    }
+
+    public function switchOff()
+    {
+    }
 }
