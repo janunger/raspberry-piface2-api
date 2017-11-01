@@ -35,6 +35,18 @@ class OutputPinTest extends TestCase
         static::assertFalse($this->SUT->isOn());
     }
 
+    /** @test */
+    public function it_persists_it_s_state()
+    {
+        $otherInstance = new OutputPin($this->dataFile);
+
+        $this->SUT->switchOn();
+        static::assertTrue($otherInstance->isOn());
+
+        $this->SUT->switchOff();
+        static::assertFalse($otherInstance->isOn());
+    }
+
     protected function tearDown()
     {
         $this->clearDataFile();

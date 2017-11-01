@@ -11,8 +11,6 @@ class OutputPin implements \JUIT\PiFace\OutputPin
      */
     private $dataFile;
 
-    private $isOn = false;
-
     public function __construct(\SplFileInfo $dataFile)
     {
         $this->dataFile = $dataFile;
@@ -25,16 +23,44 @@ class OutputPin implements \JUIT\PiFace\OutputPin
 
     public function switchOn()
     {
-        $this->isOn = true;
+        $state         = $this->readState();
+        $state['isOn'] = true;
+        $this->writeState($state);
     }
 
     public function switchOff()
     {
-        $this->isOn = false;
+        $state         = $this->readState();
+        $state['isOn'] = false;
+        $this->writeState($state);
     }
 
     public function isOn(): bool
     {
-        return $this->isOn;
+        return $this->readState()['isOn'];
+    }
+
+    private function readState(): array
+    {
+        $this->assertDataFileExists();
+
+        return json_decode(file_get_contents($this->dataFile->getPathname()), true);
+    }
+
+    private function writeState(array $state)
+    {
+        file_put_contents($this->dataFile->getPathname(), json_encode($state));
+    }
+
+    private function assertDataFileExists()
+    {
+        if ($this->dataFile->isFile()) {
+            return;
+        }
+        $this->writeState(
+            [
+                'isOn' => false,
+            ]
+        );
     }
 }
